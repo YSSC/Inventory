@@ -16,34 +16,32 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>User ID</th>
+        <th>Supplier ID</th>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Gender</th>
         <th>Membership</th>
         <th>Remarks</th>
-        <th></th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>Fellow</td>
-        <td></td>
-        <td><a href="#" class="btn btn-warning">Update</a></td>
-        <td>
-          <form action="" method="POST">
-            <input type="submit" value="Delete" class="btn btn-danger">
-          </form>
-        </td>
-      </tr>
-        {% for supplier in suppliers_list %}
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td>Fellow</td>-->
+<!--        <td></td>-->
+<!--        <td><a href="#" class="btn btn-warning">Update</a></td>-->
+<!--        <td>-->
+<!--          <form action="" method="POST">-->
+<!--            <input type="submit" value="Delete" class="btn btn-danger">-->
+<!--          </form>-->
+<!--        </td>-->
+<!--      </tr>-->
+      {% for supplier in suppliers_list %}
       <tr>
-        <td>{{ supplier.get_supplier_id() }}</td>
+        <td>{{ supplier.get_id() }}</td>
         <td>{{ supplier.get_first_name() }}</td>
         <td>{{ supplier.get_last_name() }}</td>
         <td>{{ supplier.get_gender() }}</td>
@@ -55,7 +53,7 @@
         <td>Professional</td>
         {% endif %}
         <td>{{ supplier.get_remarks() }}</td>
-        <td><a href="/updateSupplier/{{supplier.get_supplier_id()}}" class="btn btn-warning">Update</a></td>
+        <td><a href="/updateSupplier/{{supplier.get_id()}}" class="btn btn-warning">Update</a></td>
         <td>
           <form action="" method="POST">
             <input type="submit" value="Delete" class="btn btn-danger">

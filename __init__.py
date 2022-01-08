@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from Forms import CreateSupplierForm, CreateOrderForm
-import shelve, Supplier, Order
+import shelve, Inventory
 
 app = Flask(__name__)
 
@@ -16,7 +16,6 @@ def create_supplier():
     if request.method == 'POST' and create_supplier_form.validate():
         suppliers_dict = {}
         db = shelve.open('supplier.db', 'c')
-
         try:
             suppliers_dict = db['Suppliers']
             supplier_list = []
@@ -24,22 +23,23 @@ def create_supplier():
                 suppliers = suppliers_dict.get(key)
                 supplier_list.append(suppliers)
             for key in supplier_list:
-                Supplier.Supplier.count_id = key.get_supplier_id()
+                Inventory.Supplier.count_id = key.get_id()
         except:
-            print("Error in retrieving Suppliers from supplier.db.")
-
-
-        supplier = Supplier.Supplier(create_supplier_form.first_name.data, create_supplier_form.last_name.data,
-                                     create_supplier_form.gender.data, create_supplier_form.membership.data,
-                                     create_supplier_form.remarks.data)
-        suppliers_dict[supplier.get_supplier_id()] = supplier
+            print('Error in retrieving db')
+        supplier = Inventory.Supplier(create_supplier_form.first_name.data,
+                                      create_supplier_form.last_name.data,
+                                      create_supplier_form.remarks.data,
+                                      create_supplier_form.membership.data,
+                                      create_supplier_form.gender.data)
+        suppliers_dict[supplier.get_id()] = supplier
         db['Suppliers'] = suppliers_dict
 
         # Test codes
         suppliers_dict = db['Suppliers']
-        supplier = suppliers_dict[supplier.get_supplier_id()]
-        print(supplier.get_first_name(), supplier.get_last_name(), "was stored in supplier.db successfully with supplier_id ==",
-              supplier.get_supplier_id())
+        supplier = suppliers_dict[supplier.get_id()]
+        print(supplier.get_first_name(), supplier.get_last_name(),
+              "was stored in supplier.db successfully with supplier_id ==",
+              supplier.get_id())
 
         db.close()
 
@@ -61,16 +61,14 @@ def create_order():
                 orders = orders_dict.get(key)
                 orders_list.append(orders)
             for key in orders_list:
-                Order.Order.count_id = key.get_order_id()
+                Inventory.Order.count_id = key.get_order_id()
         except:
             print("Error in retrieving Orders from order.db.")
 
-        order = Order.Order(create_order_form.first_name.data, create_order_form.last_name.data,
-                            create_order_form.gender.data, create_order_form.membership.data,
-                            create_order_form.remarks.data, create_order_form.email.data,
-                            create_order_form.date_joined.data,
-                            create_order_form.address.data, )
-        orders_dict[order.get_order_id()] = order
+        order = Inventory.Order(create_order_form.email.data,
+                                create_order_form.date_joined.data,
+                                create_order_form.address.data)
+        orders_dict[order.get_id()] = order
         db['Orders'] = orders_dict
 
         db.close()
@@ -147,17 +145,15 @@ def update_supplier(id):
 @app.route('/updateOrder/<int:id>/', methods=['GET', 'POST'])
 def update_order(id):
     update_order_form = CreateOrderForm(request.form)
-    if request.method == 'POST':
+    if request.method == 'POST' and update_order_form.validate():
         orders_dict = {}
         db = shelve.open('order.db', 'w')
         orders_dict = db['Orders']
 
         order = orders_dict.get(id)
-        order.set_first_name(update_order_form.first_name.data)
-        order.set_last_name(update_order_form.last_name.data)
-        order.set_gender(update_order_form.gender.data)
-        order.set_membership(update_order_form.membership.data)
-        order.set_remarks(update_order_form.remarks.data)
+        order.set_email(update_order_form.email.data)
+        order.set_date_joined(update_order_form.date_joined.data)
+        order.set_address(update_order_form.address.data)
 
         db['Orders'] = orders_dict
         db.close()
@@ -170,11 +166,9 @@ def update_order(id):
         db.close()
 
         order = orders_dict.get(id)
-        update_order_form.first_name.data = order.get_first_name()
-        update_order_form.last_name.data = order.get_last_name()
-        update_order_form.gender.data = order.get_gender()
-        update_order_form.membership.data = order.get_membership()
-        update_order_form.remarks.data = order.get_remarks()
+        update_order_form.email.data = order.get_email()
+        update_order_form.address.data = order.get_address()
+        update_order_form.date_joined.data = order.get_date_joined()
 
         return render_template('updateOrder.html', form=update_order_form)
 

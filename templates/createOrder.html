@@ -8,15 +8,6 @@
 
 <form method="POST" action="">
   <div class="form-group">
-    {{ render_field(form.first_name, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.last_name, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.gender, class="form-control") }}
-  </div>
-  <div class="form-group">
     {{ render_field(form.email, class="form-control") }}
   </div>
   <div class="form-group">
@@ -24,14 +15,6 @@
   </div>
   <div class="form-group">
     {{ render_field(form.address, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.membership, class="form-check", style="list-style-type:none") }}
-  </div>
-  <div id="prof">
-    <div class="form-group">
-      {{ render_field(form.remarks, class="form-control") }}
-    </div>
   </div>
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
