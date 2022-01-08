@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Retrieve Suppliers{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve Suppliers</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no suppliers.</p>
+  {% elif count == 1 %}
+  <p>There is 1 supplier.</p>
+  {% else %}
+  <p>There are {{ count }} suppliers.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Gender</th>
+        <th>Membership</th>
+        <th>Remarks</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Fellow</td>
+        <td></td>
+        <td><a href="#" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="" method="POST">
+            <input type="submit" value="Delete" class="btn btn-danger">
+          </form>
+        </td>
+      </tr>
+        {% for supplier in suppliers_list %}
+      <tr>
+        <td>{{ supplier.get_supplier_id() }}</td>
+        <td>{{ supplier.get_first_name() }}</td>
+        <td>{{ supplier.get_last_name() }}</td>
+        <td>{{ supplier.get_gender() }}</td>
+        {% if supplier.get_membership() == "F" %}
+        <td>Fellow</td>
+        {% elif supplier.get_membership() == "S" %}
+        <td>Senior</td>
+        {% elif supplier.get_membership() == "P" %}
+        <td>Professional</td>
+        {% endif %}
+        <td>{{ supplier.get_remarks() }}</td>
+        <td><a href="/updateSupplier/{{supplier.get_supplier_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="" method="POST">
+            <input type="submit" value="Delete" class="btn btn-danger">
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
