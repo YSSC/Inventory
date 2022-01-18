@@ -12,74 +12,106 @@ class Inventory:
 class Supplier(Inventory):
     def __init__(
             self,
-            first_name,
-            last_name,
-            remarks,
-            membership,
-            gender):
-        super().__init__()
-        self.__first_name = first_name
-        self.__last_name = last_name
-        self.__remarks = remarks
-        self.__membership = membership
-        self.__gender = gender
-
-    def set_first_name(self, first_name):
-        self.__first_name = first_name
-
-    def set_last_name(self, last_name):
-        self.__last_name = last_name
-
-    def set_remarks(self, remarks):
-        self.__remarks = remarks
-
-    def set_membership(self, membership):
-        self.__membership = membership
-
-    def set_gender(self, gender):
-        self.__gender = gender
-
-    def get_first_name(self):
-        return self.__first_name
-
-    def get_last_name(self):
-        return self.__last_name
-
-    def get_remarks(self):
-        return self.__remarks
-
-    def get_membership(self):
-        return self.__membership
-
-    def get_gender(self):
-        return self.__gender
-
-
-class Order(Inventory):
-    def __init__(
-            self,
+            supplier_name,
+            name,
+            phone,
+            address,
             email,
-            date_joined,
-            address):
+            remarks):
         super().__init__()
+        self.__supplier_name = supplier_name
+        self.__name = name
+        self.__phone = phone
+        self.__address = address
         self.__email = email
-        self.__date_joined = date_joined
+        self.__remarks = remarks
+
+
+    def set_supplier_name(self, supplier_name):
+        self.__supplier_name = supplier_name
+
+    def set_name(self, name):
+        self.__name = name
+
+    def set_phone(self, phone):
+        self.__phone = phone
+
+    def set_address(self, address):
         self.__address = address
 
     def set_email(self, email):
         self.__email = email
 
-    def set_date_joined(self, date_joined):
-        self.__date_joined = date_joined
+    def set_remarks(self, remarks):
+        self.__remarks = remarks
 
-    def set_address(self, address):
-        self.__address = address
+    def get_supplier_name(self):
+        return self.__supplier_name
+
+    def get_name(self):
+        return self.__name
+
+    def get_phone(self):
+        return self.__phone
+
+    def get_address(self):
+        return self.__address
 
     def get_email(self):
         return self.__email
 
-    def get_date_joined(self):
-        return self.__date_joined
+    def get_remarks(self):
+        return self.__remarks
 
-    def get_address(self):
-        return self.__address
+class Order(Inventory):
+    def __init__(
+            self,
+            date,
+            purchase_order,
+            supplier,
+            delivery_date,
+            order_status,
+            amount):
+        super().__init__()
+        self.__date = date
+        self.__purchase_order = purchase_order
+        self.__supplier = supplier
+        self.__delivery_date = delivery_date
+        self.__order_status = order_status
+        self.__amount = amount
+
+    def set_date(self, date):
+        self.__date = date
+
+    def set_purchase_order(self, purchase_order):
+        self.__purchase_order = purchase_order
+
+    def set_supplier(self, supplier):
+        self.__supplier = supplier
+
+    def set_delivery_date(self, delivery_date):
+        self.__delivery_date = delivery_date
+
+    def set_order_status(self, order_status):
+        self.__order_status = order_status
+
+    def set_amount(self, amount):
+        self.__amount = amount
+
+    def get_date(self):
+        return self.__date
+
+    def get_purchase_order(self):
+        return self.__purchase_order
+
+    def get_supplier(self):
+        return self.__supplier
+
+    def get_delivery_date(self):
+        return self.__delivery_date
+
+    def get_order_status(self):
+        return self.__order_status
+
+    def get_amount(self):
+        return self.__amount

@@ -26,18 +26,18 @@ def create_supplier():
                 Inventory.Supplier.count_id = key.get_id()
         except:
             print('Error in retrieving db')
-        supplier = Inventory.Supplier(create_supplier_form.first_name.data,
-                                      create_supplier_form.last_name.data,
-                                      create_supplier_form.remarks.data,
-                                      create_supplier_form.membership.data,
-                                      create_supplier_form.gender.data)
+        supplier = Inventory.Supplier(create_supplier_form.supplier_name.data,
+                                      create_supplier_form.name.data,
+                                      create_supplier_form.phone.data,
+                                      create_supplier_form.address.data,
+                                      create_supplier_form.email.data,create_supplier_form.email.data,)
         suppliers_dict[supplier.get_id()] = supplier
         db['Suppliers'] = suppliers_dict
 
         # Test codes
         suppliers_dict = db['Suppliers']
         supplier = suppliers_dict[supplier.get_id()]
-        print(supplier.get_first_name(), supplier.get_last_name(),
+        print(supplier.get_supplier_name(), supplier.get_name(),
               "was stored in supplier.db successfully with supplier_id ==",
               supplier.get_id())
 
@@ -50,7 +50,7 @@ def create_supplier():
 @app.route('/createOrder', methods=['GET', 'POST'])
 def create_order():
     create_order_form = CreateOrderForm(request.form)
-    if request.method == 'POST' and create_order_form.validate():
+    if request.method == 'POST':
         orders_dict = {}
         db = shelve.open('order.db', 'c')
 
@@ -65,15 +65,25 @@ def create_order():
         except:
             print("Error in retrieving Orders from order.db.")
 
-        order = Inventory.Order(create_order_form.email.data,
-                                create_order_form.date_joined.data,
-                                create_order_form.address.data)
+        order = Inventory.Order(create_order_form.date.data,
+                                create_order_form.purchase_order.data,
+                                create_order_form.supplier.data,
+                                create_order_form.delivery_date.data,
+                                create_order_form.order_status.data,
+                                create_order_form.amount.data)
         orders_dict[order.get_id()] = order
         db['Orders'] = orders_dict
 
+        # Test codes
+        orders_dict = db['Orders']
+        order = orders_dict[order.get_id()]
+        print(order.get_date(), order.get_supplier(),
+              "was stored in order.db successfully with order_id ==",
+              order.get_id())
+
         db.close()
 
-        return redirect(url_for('home'))
+        return redirect(url_for('retrieve_orders'))
     return render_template('createOrder.html', form=create_order_form)
 
 
@@ -116,10 +126,11 @@ def update_supplier(id):
         suppliers_dict = db['Suppliers']
 
         supplier = suppliers_dict.get(id)
-        supplier.set_first_name(update_supplier_form.first_name.data)
-        supplier.set_last_name(update_supplier_form.last_name.data)
-        supplier.set_gender(update_supplier_form.gender.data)
-        supplier.set_membership(update_supplier_form.membership.data)
+        supplier.set_supplier_name(update_supplier_form.supplier_name.data)
+        supplier.set_name(update_supplier_form.name.data)
+        supplier.set_phone(update_supplier_form.phone.data)
+        supplier.set_address(update_supplier_form.address.data)
+        supplier.set_email(update_supplier_form.email.data)
         supplier.set_remarks(update_supplier_form.remarks.data)
 
         db['Suppliers'] = suppliers_dict
@@ -133,10 +144,11 @@ def update_supplier(id):
         db.close()
 
         supplier = suppliers_dict.get(id)
-        update_supplier_form.first_name.data = supplier.get_first_name()
-        update_supplier_form.last_name.data = supplier.get_last_name()
-        update_supplier_form.gender.data = supplier.get_gender()
-        update_supplier_form.membership.data = supplier.get_membership()
+        update_supplier_form.supplier_name.data = supplier.get_supplier_name()
+        update_supplier_form.name.data = supplier.get_name()
+        update_supplier_form.phone.data = supplier.get_phone()
+        update_supplier_form.address.data = supplier.get_address()
+        update_supplier_form.email.data = supplier.get_email()
         update_supplier_form.remarks.data = supplier.get_remarks()
 
         return render_template('updateSupplier.html', form=update_supplier_form)
@@ -145,15 +157,18 @@ def update_supplier(id):
 @app.route('/updateOrder/<int:id>/', methods=['GET', 'POST'])
 def update_order(id):
     update_order_form = CreateOrderForm(request.form)
-    if request.method == 'POST' and update_order_form.validate():
+    if request.method == 'POST':
         orders_dict = {}
         db = shelve.open('order.db', 'w')
         orders_dict = db['Orders']
 
         order = orders_dict.get(id)
-        order.set_email(update_order_form.email.data)
-        order.set_date_joined(update_order_form.date_joined.data)
-        order.set_address(update_order_form.address.data)
+        order.set_date(update_order_form.date.data)
+        order.set_purchase_order(update_order_form.purchase_order.data)
+        order.set_supplier(update_order_form.supplier.data)
+        order.set_delivery_date(update_order_form.delivery_date.data)
+        order.set_order_status(update_order_form.order_status.data)
+        order.set_amount(   update_order_form.amount.data)
 
         db['Orders'] = orders_dict
         db.close()
@@ -166,11 +181,40 @@ def update_order(id):
         db.close()
 
         order = orders_dict.get(id)
-        update_order_form.email.data = order.get_email()
-        update_order_form.address.data = order.get_address()
-        update_order_form.date_joined.data = order.get_date_joined()
+        update_order_form.date.data = order.get_date()
+        update_order_form.purchase_order.data = order.get_purchase_order()
+        update_order_form.supplier.data = order.get_supplier()
+        update_order_form.delivery_date.data = order.get_delivery_date()
+        update_order_form.order_status.data = order.get_order_status()
+        update_order_form.amount.data = order.get_amount()
 
         return render_template('updateOrder.html', form=update_order_form)
+
+@app.route('/deleteSupplier/<int:id>', methods=['POST'])
+def delete_supplier(id):
+    suppliers_dict = {}
+    db = shelve.open('supplier.db', 'w')
+    suppliers_dict = db['Suppliers']
+
+    suppliers_dict.pop(id)
+
+    db['Suppliers'] = suppliers_dict
+    db.close()
+
+    return redirect(url_for('retrieve_suppliers'))
+
+@app.route('/deleteOrder/<int:id>', methods=['POST'])
+def delete_order(id):
+    orders_dict = {}
+    db = shelve.open('order.db', 'w')
+    orders_dict = db['Orders']
+
+    orders_dict.pop(id)
+
+    db['Orders'] = orders_dict
+    db.close()
+
+    return redirect(url_for('retrieve_orders'))
 
 
 if __name__ == '__main__':
