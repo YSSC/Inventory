@@ -14,6 +14,5 @@ class CreateOrderForm(Form):
     purchase_order = StringField('Purchase Order', [validators.Length(min=1, max=150), validators.DataRequired()])
     supplier = StringField('Supplier', [validators.Length(min=1, max=150), validators.DataRequired()])
     delivery_date = DateField('Date', format='%Y-%m-%d')
-    order_status = StringField('Order Status', [validators.Length(min=1, max=150), validators.DataRequired()])
     amount = StringField('Amount', [validators.Length(min=1, max=150), validators.DataRequired()])
 

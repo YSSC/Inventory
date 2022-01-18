@@ -69,7 +69,6 @@ def create_order():
                                 create_order_form.purchase_order.data,
                                 create_order_form.supplier.data,
                                 create_order_form.delivery_date.data,
-                                create_order_form.order_status.data,
                                 create_order_form.amount.data)
         orders_dict[order.get_id()] = order
         db['Orders'] = orders_dict
@@ -115,6 +114,21 @@ def retrieve_orders():
         orders_list.append(order)
 
     return render_template('retrieveOrders.html', count=len(orders_list), orders_list=orders_list)
+
+@app.route("/status_order/<int:id>/", methods=['POST'])
+def status_order(id):
+    db = shelve.open('order.db', 'w')
+    orders_dict: dict = db['Orders']
+    orders_id = orders_dict.get(id)
+    if orders_id.get_order_status()=='Active': #if obj status is active
+        print(f"Event Key {orders_id.get_id()} has been inactivated!")
+        orders_id.set_order_status('Inactive') # it will then auto set to inactive
+    else:
+        print(f"Event Key {orders_id.get_id()} has been activated!")
+        orders_id.set_order_status('Active')
+    db['Orders'] = orders_dict
+    db.close()
+    return redirect(url_for("retrieve_orders"))
 
 
 @app.route('/updateSupplier/<int:id>/', methods=['GET', 'POST'])

@@ -70,14 +70,13 @@ class Order(Inventory):
             purchase_order,
             supplier,
             delivery_date,
-            order_status,
             amount):
         super().__init__()
         self.__date = date
         self.__purchase_order = purchase_order
         self.__supplier = supplier
         self.__delivery_date = delivery_date
-        self.__order_status = order_status
+        self.__order_status = 'Active'
         self.__amount = amount
 
     def set_date(self, date):
